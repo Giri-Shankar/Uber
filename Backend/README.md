@@ -174,6 +174,105 @@ Send a JSON object with the following structure:
     }
     ```
 
+
 ## Notes
 - The password is not returned in the response.
 - Use the returned token for authenticated requests.
+
+---
+
+### Get User Profile
+
+`GET /users/profile`
+
+## Description
+
+Returns the authenticated user's profile information. Requires a valid JWT token in the `Authorization` header or as a cookie.
+
+## Authentication
+
+This endpoint is protected. You must provide a valid JWT token:
+
+- In the `Authorization` header as `Bearer <token>`, or
+- As a `token` cookie.
+
+## Responses
+
+- **200 OK**
+  - Returns the user's profile information.
+  - Response body:
+    ```json
+    {
+      "_id": "<user id>",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+      // other user fields
+    }
+    ```
+
+- **401 Unauthorized**
+  - Missing or invalid token, or token is blacklisted.
+  - Response body:
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
+
+## Notes
+- No password is returned in the response.
+- Use the token received from login or registration.
+
+---
+
+### Logout User
+
+`POST /users/logout`
+
+## Description
+
+Logs out the authenticated user by blacklisting the current JWT token and clearing the authentication cookie. Requires a valid JWT token in the `Authorization` header or as a cookie.
+
+## Authentication
+
+This endpoint is protected. You must provide a valid JWT token:
+
+- In the `Authorization` header as `Bearer <token>`, or
+- As a `token` cookie.
+
+## Responses
+
+- **200 OK**
+  - Logout successful.
+  - Response body:
+    ```json
+    {
+      "message": "Logged Out"
+    }
+    ```
+
+- **401 Unauthorized**
+  - Missing or invalid token, or token is blacklisted.
+  - Response body:
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
+- **500 Internal Server Error**
+  - Server error during logout.
+  - Response body:
+    ```json
+    {
+      "error": "Server error"
+    }
+    ```
+
+## Notes
+- The token is invalidated after logout and cannot be used again.
+- The authentication cookie is cleared on logout.
