@@ -18,3 +18,15 @@ module.exports.createUser = async ({
 
     return user;
 }
+
+module.exports.findUser = async ({
+    email
+}) => {
+    if (!email) {
+        throw new Error('Email is required');
+    }
+
+    const user = await userModel.findOne({ email }).select('+password');
+
+    return user;
+}
